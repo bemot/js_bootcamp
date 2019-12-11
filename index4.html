@@ -21,7 +21,7 @@
           <ul>
             {props.list.map((friend) => (
               <li key={friend.index}>
-                <span>{friend.name}</span>
+                <span>{friend.index} {friend.name}</span>
                 <button id="remove_button" onClick={() => props.onRemoveFriend(friend.index)}>Remove</button>
                 <button id="deactivate_button" onClick={() => props.onToggleFriend(friend.index,friend.name)}>Deactivate</button>
               </li>
@@ -38,7 +38,7 @@
           <ul>
             {props.list.map((friend) => (
               <li key={friend.index}>
-                <span>{friend.name}</span>
+                <span>{friend.index} {friend.name}</span>
                 <button onClick={() => props.onToggleFriend(friend.index,friend.name)}>Activate</button>
               </li>
             ))}

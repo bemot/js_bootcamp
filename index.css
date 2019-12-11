@@ -1,0 +1,27 @@
+body {
+  background-color: linen;
+  font-size: 20px;
+}
+
+button {
+  background-color: #4CAF50; /* Green */
+  font-size: 15px;
+ }
+
+#remove_button {
+     position: absolute;
+     left: 350px;
+  }
+#deactivate_button {
+     position: absolute;
+     left: 450px;
+  }
+
+input {
+  font-size: 16px;
+  background-color: linen;
+}
+
+input:focus {
+    background-color: lightblue;
+}
