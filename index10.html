@@ -41,7 +41,7 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
 
-                <span>{bible_words.chunk_of_words}</span>
+                <span>{bible_words.index} {bible_words.chunk_of_words}</span>
 
                 <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Activate</button>
               </li>
@@ -56,7 +56,7 @@
             var result           = '';
             var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             var charactersLength = characters.length;
-            for ( var ii = 0; ii < length; ii++ ) {
+            for ( var i = 0; i < length; i++ ) {
                 result += characters.charAt(Math.floor(Math.random() * charactersLength));
                  }
                 return result;
@@ -110,7 +110,7 @@
           return {
             bible_words: currentState.bible_words.concat([{
             chunk_of_words: BW_array[i],
-            index: makeid(10),
+            index: i,
             active: false
            }])
           }
@@ -118,7 +118,7 @@
         })
         i++;
        }
-       while (i < BW_array.length);
+       while (i <= BW_array.length);
      }
 
 
