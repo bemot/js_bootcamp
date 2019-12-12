@@ -2,7 +2,7 @@
 <meta charset=utf8>
 <html>
 <head>
-  <title>Bible Verse</title>
+  <title>First React App</title>
 <link rel="stylesheet" type="text/css" href="index.css">
 
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
@@ -40,7 +40,7 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
                 <span>{bible_words.name}</span>
-                <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.name)}>Activate</button>
+                <button onClick={() => props.onToggleWord(bible_words.index,bible_words.name)}>Activate</button>
               </li>
             ))}
           </ul>
@@ -79,7 +79,7 @@
         this.updateInput = this.updateInput.bind(this)
         this.handleAddAllWords = this.handleAddAllWords.bind(this)
         this.handleToggleWord = this.handleToggleWord.bind(this)
-
+        this.handleBibleTextChange =this.handleBibleTextChange.bind(this)
 
         } //end constructor
 
@@ -102,16 +102,8 @@
       async handleAddAllWords() {
         let i=0;
         let BW_array = [];
-        let array2 = [];
-        BW_array = await this.state.value.match(/.*?[\.\)\s]+?/g);
-        while(BW_array.length !== 0) {
-            let randomIndex=Math.floor(Math.random() *BW_array.length);
-            array2.push(BW_array[randomIndex]);
-            BW_array.splice(randomIndex,1);
-        }
-        BW_array = array2;
-
-       // console.log(BW_array);
+        BW_array = await this.state.value.match(/.*?[\.\s]+?/g);
+        console.log(BW_array);
 
         do {
 
@@ -121,16 +113,18 @@
             bible_words: currentState.bible_words.concat([{
             index: makeid(10),
             name: BW_array[i],
-            active:false,
+            active:true,
            }])
           }
 
         })
         i++;
        }
-       while (i <= BW_array.length);
+       while (i < BW_array.length);
      }
 
+      handleBibleTextChange() {
+      }
 
       handleRemoveWord(index) {
         this.setState((currentState) => {
@@ -159,7 +153,7 @@
       updateInput(e) {
         const value = e.target.value
         this.setState({
-          value: value
+          one_word: value
         })
       }
 
@@ -170,8 +164,7 @@
             <div id="bible_text">
             Цитата з Біблії:
             <br />
-              <textarea rows="7" cols="100" id="bible_text" value={this.state.value}
-                                            onChange={this.updateInput} />
+              <textarea rows="7" cols="100" id="bible_text" value={this.state.value} onChange={this.handleBibleTextChange} />
 
             <br />
                 <button onClick={this.handleAddAllWords}>
@@ -185,20 +178,15 @@
                 bible_words: []
               })}>Clear All</button>
             </div>
-            <div id ="active">
-            <  ActiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
-                onRemoveWord={this.handleRemoveWord}
-                onToggleWord={this.handleToggleWord}
+            <ActiveWords
+              list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
+              onRemoveWord={this.handleRemoveWord}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-            <div id="inactive">
-              <InactiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
-                onToggleWord={this.handleToggleWord}
+            <InactiveWords
+              list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-
           </div>
         )
       }

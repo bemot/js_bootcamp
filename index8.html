@@ -40,7 +40,7 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
                 <span>{bible_words.name}</span>
-                <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.name)}>Activate</button>
+                <button onClick={() => props.onToggleWord(bible_words.index,bible_words.name)}>Activate</button>
               </li>
             ))}
           </ul>
@@ -103,7 +103,7 @@
         let i=0;
         let BW_array = [];
         let array2 = [];
-        BW_array = await this.state.value.match(/.*?[\.\)\s]+?/g);
+        BW_array = await this.state.value.match(/.*?[\.\(.\)\s]+?/g);
         while(BW_array.length !== 0) {
             let randomIndex=Math.floor(Math.random() *BW_array.length);
             array2.push(BW_array[randomIndex]);
@@ -185,20 +185,15 @@
                 bible_words: []
               })}>Clear All</button>
             </div>
-            <div id ="active">
-            <  ActiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
-                onRemoveWord={this.handleRemoveWord}
-                onToggleWord={this.handleToggleWord}
+            <ActiveWords
+              list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
+              onRemoveWord={this.handleRemoveWord}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-            <div id="inactive">
-              <InactiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
-                onToggleWord={this.handleToggleWord}
+            <InactiveWords
+              list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-
           </div>
         )
       }

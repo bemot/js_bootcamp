@@ -2,7 +2,7 @@
 <meta charset=utf8>
 <html>
 <head>
-  <title>Bible Verse</title>
+  <title>First React App</title>
 <link rel="stylesheet" type="text/css" href="index.css">
 
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
@@ -19,12 +19,11 @@
         <div>
           <h2>Правильний вірш з Біблії</h2>
           <ul>
-            {props.list.map((bible_words) => (
-              <li key={bible_words.index}>
-                <span>{bible_words.name}</span>
-                <button id="remove_button" onClick={() => props.onRemoveWord(bible_words.index)}>Remove</button>
-                <button id="deactivate_button" onClick={() =>
-                props.onToggleWord(bible_words.index,bible_words.name)}>Deactivate</button>
+            {props.list.map((bible_word) => (
+              <li key={bible_word.index}>
+                <span>{bible_word.name}</span>
+                <button id="remove_button" onClick={() => props.onRemoveWord(bible_word.index)}>Remove</button>
+                <button id="deactivate_button" onClick={() => props.onToggleWord(bible_word.index,bible_word.name)}>Deactivate</button>
               </li>
             ))}
           </ul>
@@ -37,10 +36,10 @@
         <div>
           <h2>Неправильний вірш</h2>
           <ul>
-            {props.list.map((bible_words) => (
-              <li key={bible_words.index}>
-                <span>{bible_words.name}</span>
-                <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.name)}>Activate</button>
+            {props.list.map((bible_word) => (
+              <li key={bible_word.index}>
+                <span>{bible_word.name}</span>
+                <button onClick={() => props.onToggleWord(bible_word.index,bible_word.name)}>Activate</button>
               </li>
             ))}
           </ul>
@@ -64,22 +63,52 @@
     class App extends React.Component {
       constructor(props) {
         super(props)
-
         this.state = {
-           one_word: '',
-           value:  'На початку Бог створив Небо та землю.',
-           bible_words: []
+          bible_words: [
+            {
+              index: '1fgf111111',
+              name: 'слави',
+              active: false,
+            },
+            {
+              index: '22hkj22222',
+              name: 'і позбавлені',
+              active: false,
+            },
+            {
+              index: '32dfdsf133',
+              name: 'бо',
+              active: false
+            },
+            {
+              index: '111ewee111',
+              name: 'згрішили',
+              active: false,
+            },
+            {
+              index: '32222ryt33',
+              name: 'всі',
+              active: false
+            },
+            {
+              index: '11111vcb11',
+              name: 'Божої',
+              active: false,
+            },
+            {
+              index: '22226rt222',
+              name: 'Рим.3:23',
+              active: false,
+            }
 
-       }
 
-
-
-
+          ],
+          input: '',
+        }
         this.handleRemoveWord = this.handleRemoveWord.bind(this)
         this.updateInput = this.updateInput.bind(this)
-        this.handleAddAllWords = this.handleAddAllWords.bind(this)
+        this.handleAddWord = this.handleAddWord.bind(this)
         this.handleToggleWord = this.handleToggleWord.bind(this)
-
 
         } //end constructor
 
@@ -99,43 +128,26 @@
 //    }
 
 
-      async handleAddAllWords() {
-        let i=0;
-        let BW_array = [];
-        let array2 = [];
-        BW_array = await this.state.value.match(/.*?[\.\)\s]+?/g);
-        while(BW_array.length !== 0) {
-            let randomIndex=Math.floor(Math.random() *BW_array.length);
-            array2.push(BW_array[randomIndex]);
-            BW_array.splice(randomIndex,1);
-        }
-        BW_array = array2;
-
-       // console.log(BW_array);
-
-        do {
-
+      handleAddWord() {
         this.setState((currentState) => {
-
+         if (this.state.input.length > 1) {
           return {
             bible_words: currentState.bible_words.concat([{
             index: makeid(10),
-            name: BW_array[i],
-            active:false,
-           }])
+            name: this.state.input,
+            active:true,
+           }]), input:''
           }
-
+         } else {alert('Your input is wrong? The name must be more then one symbol.')}
         })
-        i++;
-       }
-       while (i <= BW_array.length);
-     }
+      }
+
 
 
       handleRemoveWord(index) {
         this.setState((currentState) => {
           return {
-            bible_words: currentState.bible_words.filter((bible_words) => bible_words.index !== index)
+            bible_words: currentState.bible_words.filter((bible_word) => bible_word.index !== index)
           }
         })
       }
@@ -143,13 +155,13 @@
 
       handleToggleWord(index,name) {
         this.setState((currentState) => {
-          const bible_words = currentState.bible_words.find((bible_word) => bible_word.index === index)
+          const bible_word = currentState.bible_words.find((bible_word) => bible_word.index === index)
           return {
             bible_words: currentState.bible_words.filter((bible_word) => bible_word.index !== index)
               .concat([{
                 index,
                 name,
-                active: !bible_words.active
+                active: !bible_word.active
               }])
           }
         })
@@ -159,46 +171,38 @@
       updateInput(e) {
         const value = e.target.value
         this.setState({
-          value: value
+          input: value
         })
       }
 
       render() {
         return (
           <div>
+            <input
+              type='text'
+              placeholder='new bible_word'
+              value={this.state.input}
+              onChange={this.updateInput}
+            />
 
-            <div id="bible_text">
-            Цитата з Біблії:
-            <br />
-              <textarea rows="7" cols="100" id="bible_text" value={this.state.value}
-                                            onChange={this.updateInput} />
 
-            <br />
-                <button onClick={this.handleAddAllWords}>
-                        Submit
-                </button>
-            <br />
-            </div>
-
+            <button onClick={this.handleAddWord}>
+                    Submit
+            </button>
             <div id="clear_button">
               <button id="clear_button" onClick={() => this.setState({
                 bible_words: []
               })}>Clear All</button>
             </div>
-            <div id ="active">
-            <  ActiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
-                onRemoveWord={this.handleRemoveWord}
-                onToggleWord={this.handleToggleWord}
+            <ActiveWords
+              list={this.state.bible_words.filter((bible_word) => bible_word.active === true)}
+              onRemoveWord={this.handleRemoveWord}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-            <div id="inactive">
-              <InactiveWords
-                list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
-                onToggleWord={this.handleToggleWord}
+            <InactiveWords
+              list={this.state.bible_words.filter((bible_word) => bible_word.active === false)}
+              onToggleWord={this.handleToggleWord}
             />
-            </div>
-
           </div>
         )
       }
