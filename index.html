@@ -22,7 +22,7 @@
           <ul>
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
-                <span>{bible_words.chunk_of_words}</span>
+                <span>{bible_words.index}. {bible_words.chunk_of_words}</span>
                 <button id="remove_button" onClick={() => props.onRemoveWord(bible_words.index)}>Remove</button>
                 <button id="deactivate_button" onClick={() =>
                 props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Deactivate</button>
@@ -41,7 +41,7 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
 
-                <span>{bible_words.chunk_of_words}</span>
+                <span>{bible_words.index}. {bible_words.chunk_of_words}</span>
 
                 <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Activate</button>
               </li>
@@ -51,7 +51,7 @@
       )
     }
 
-
+//i am not using this function now, maybe later, who knows...
        function makeid(length) {
             var result           = '';
             var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -111,7 +111,7 @@
           return {
             bible_words: currentState.bible_words.concat([{
             chunk_of_words: BW_array[i],
-            index: makeid(10),
+            index: i,
             active: false
            }])
           }
