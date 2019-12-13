@@ -5,35 +5,26 @@ body {
 
 button {
   background-color: #4CAF50; /* Green */
-  font-size: 17px;
+  font-size: 15px;
  }
 
 #remove_button {
      position: absolute;
      left: 260px;
+     font-size: 17px;
   }
 #deactivate_button {
      position: absolute;
      left: 340px;
+     font-size: 17px;
   }
 
 #activate_button {
      position: absolute;
      left: 210px;
   }
-input {
-  font-size: 15px;
-  background-color: linen;
-}
-
-input:focus {
-    background-color: lightblue;
-}
-
-#bible_text {
 
 
-}
 
 #active {
 position: fixed;
@@ -51,3 +42,7 @@ position: fixed;
   border: 1px solid #53AD21
 }
 
+textarea {
+   font-family:"Times New Roman", Times, serif;
+   font-size: 16.5px;
+}

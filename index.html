@@ -22,7 +22,7 @@
           <ul>
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
-                <span>{bible_words.index}. {bible_words.chunk_of_words}</span>
+                <span>{bible_words.chunk_of_words}</span>
                 <button id="remove_button" onClick={() => props.onRemoveWord(bible_words.index)}>Remove</button>
                 <button id="deactivate_button" onClick={() =>
                 props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Deactivate</button>
@@ -41,7 +41,7 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
 
-                <span>{bible_words.index}. {bible_words.chunk_of_words}</span>
+                <span>{bible_words.chunk_of_words}</span>
 
                 <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Activate</button>
               </li>
@@ -62,7 +62,16 @@
                 return result;
         }
 
+    function compareHashes(hash1,hash2) {
+    console.log(hash1);
+    console.log(hash2);
+        if (hash1===hash2)
+        return true
+        else
+        return false
 
+
+    }
 
 
 
@@ -75,7 +84,9 @@
            value:  first_text,
            bible_words: [],
            text_hash: objectHash.sha1(first_text),
-           main_text:'',
+           main_text: '',
+           main_hash: objectHash.sha1(''),
+
 
        }
 
@@ -85,7 +96,6 @@
         this.updateInput = this.updateInput.bind(this)
         this.handleAddAllWords = this.handleAddAllWords.bind(this)
         this.handleToggleWord = this.handleToggleWord.bind(this)
-
 
       } //end constructor
 
@@ -137,6 +147,10 @@
           const bible_words = currentState.bible_words.find((bible_word) => bible_word.index === index)
 
           this.state.main_text=this.state.main_text +chunk_of_words;
+          this.state.main_hash= objectHash.sha1(this.state.main_text);
+          if (compareHashes(this.state.text_hash,this.state.main_hash)) {
+            alert('you made it!');
+          }
 
           return {
             bible_words: currentState.bible_words.filter((bible_word) => bible_word.index !== index)
@@ -176,8 +190,8 @@
             <br />
             </div>
 
-            <div id="maintext">
-                     {objectHash.sha1(this.state.main_text)}
+            <div id="main_text">
+                     {this.state.main_hash}
                 <br />
                     <textarea readOnly rows="7" cols="100" value={this.state.main_text} />
             </div>
@@ -186,6 +200,8 @@
               <button id="clear_button" onClick={() => this.setState({
                 bible_words: [],
                 main_text: '',
+                main_hash: objectHash.sha1(''),
+
 
               })}>Clear All</button>
             </div>
@@ -196,12 +212,14 @@
                 list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
                 onRemoveWord={this.handleRemoveWord}
                 onToggleWord={this.handleToggleWord}
+
             />
             </div>
             <div id="inactive">
               <InactiveWords
                 list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
                 onToggleWord={this.handleToggleWord}
+
             />
             </div>
 
