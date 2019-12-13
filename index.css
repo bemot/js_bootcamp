@@ -1,6 +1,6 @@
 body {
   background-color: linen;
-  font-size: 17px;
+
 }
 
 button {
@@ -22,7 +22,7 @@ button {
      left: 210px;
   }
 input {
-  font-size: 17px;
+  font-size: 15px;
   background-color: linen;
 }
 
@@ -31,7 +31,7 @@ input:focus {
 }
 
 #bible_text {
-    font-size: 17px;
+
 
 }
 

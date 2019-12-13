@@ -71,10 +71,11 @@
       super(props)
         let first_text = 'Бо заплата за гріх смерть, а дар Божий вічне життя в Христі Ісусі, Господі нашім! (До Римлян 6:23)'
         this.state = {
-           one_word: '',
+           one_word : '',
            value:  first_text,
            bible_words: [],
            text_hash: objectHash.sha1(first_text),
+           main_text:'',
 
        }
 
@@ -134,6 +135,9 @@
       handleToggleWord(index,chunk_of_words) {
         this.setState((currentState) => {
           const bible_words = currentState.bible_words.find((bible_word) => bible_word.index === index)
+
+          this.state.main_text=this.state.main_text +chunk_of_words;
+
           return {
             bible_words: currentState.bible_words.filter((bible_word) => bible_word.index !== index)
               .concat([{
@@ -159,7 +163,7 @@
           <div>
 
             <div id="bible_text">
-            <h3>Цитата з Біблії:</h3> the text hash: {this.state.text_hash}
+            <h3>Цитата з Біблії:</h3>{this.state.text_hash}
 
             <br />
               <textarea rows="7" cols="100" id="bible_text" value={this.state.value}
@@ -172,9 +176,17 @@
             <br />
             </div>
 
+            <div id="maintext">
+                     {objectHash.sha1(this.state.main_text)}
+                <br />
+                    <textarea readOnly rows="7" cols="100" value={this.state.main_text} />
+            </div>
+
             <div id="clear_button">
               <button id="clear_button" onClick={() => this.setState({
-                bible_words: []
+                bible_words: [],
+                main_text: '',
+
               })}>Clear All</button>
             </div>
 
