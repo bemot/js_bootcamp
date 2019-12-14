@@ -23,9 +23,10 @@
             {props.list.map((bible_words) => (
               <li key={bible_words.index}>
                 <span>{bible_words.chunk_of_words}</span>
-                <button id="remove_button" onClick={() => props.onRemoveWord(bible_words.index)}>Remove</button>
+                <button id="remove_button" onClick={() =>
+                props.onRemoveWord(bible_words.index)}>Видалити</button>
                 <button id="deactivate_button" onClick={() =>
-                props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Deactivate</button>
+                props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Деактивувати</button>
               </li>
             ))}
           </ul>
@@ -43,7 +44,8 @@
 
                 <span>{bible_words.chunk_of_words}</span>
 
-                <button id="activate_button" onClick={() => props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Activate</button>
+                <button id="activate_button" onClick={() =>
+                props.onToggleWord(bible_words.index,bible_words.chunk_of_words)}>Активувати</button>
               </li>
             ))}
           </ul>
@@ -63,8 +65,8 @@
         }
 
     function compareHashes(hash1,hash2) {
-    console.log(hash1);
-    console.log(hash2);
+    //console.log(hash1);
+    //console.log(hash2);
         if (hash1===hash2)
         return true
         else
@@ -81,10 +83,10 @@
         let first_text = 'Бо заплата за гріх смерть, а дар Божий вічне життя в Христі Ісусі, Господі нашім! (До Римлян 6:23)'
         this.state = {
            one_word : '',
-           value:  first_text,
+           value: first_text,
+           value_main: '',
            bible_words: [],
            text_hash: objectHash.sha1(first_text),
-           main_text: '',
            main_hash: objectHash.sha1(''),
 
 
@@ -93,9 +95,11 @@
 
 
         this.handleRemoveWord = this.handleRemoveWord.bind(this)
-        this.updateInput = this.updateInput.bind(this)
+        this.updateInput_text = this.updateInput_text.bind(this)
+        this.updateInput_main = this.updateInput_main.bind(this)
         this.handleAddAllWords = this.handleAddAllWords.bind(this)
-        this.handleToggleWord = this.handleToggleWord.bind(this)
+        this.handleToggleWord_to_active = this.handleToggleWord_to_active.bind(this)
+        this.handleToggleWord_from_active = this.handleToggleWord_from_active.bind(this)
 
       } //end constructor
 
@@ -142,12 +146,33 @@
       }
 
 
-      handleToggleWord(index,chunk_of_words) {
+      handleToggleWord_to_active(index,chunk_of_words) {
         this.setState((currentState) => {
           const bible_words = currentState.bible_words.find((bible_word) => bible_word.index === index)
 
-          this.state.main_text=this.state.main_text +chunk_of_words;
-          this.state.main_hash= objectHash.sha1(this.state.main_text);
+          this.state.value_main=this.state.value_main +chunk_of_words;
+          this.state.main_hash= objectHash.sha1(this.state.value_main);
+          if (compareHashes(this.state.text_hash,this.state.main_hash)) {
+            alert('you made it!');
+          }
+
+          return {
+            bible_words: currentState.bible_words.filter((bible_word) => bible_word.index !== index)
+              .concat([{
+                index,
+                chunk_of_words,
+                active: !bible_words.active
+              }])
+          }
+        })
+      }
+
+      handleToggleWord_from_active(index,chunk_of_words) {
+        this.setState((currentState) => {
+          const bible_words = currentState.bible_words.find((bible_word) => bible_word.index === index)
+
+          //this.state.value_main=this.state.value_main +chunk_of_words;
+          this.state.main_hash= objectHash.sha1(this.state.value_main);
           if (compareHashes(this.state.text_hash,this.state.main_hash)) {
             alert('you made it!');
           }
@@ -164,11 +189,20 @@
       }
 
 
-      updateInput(e) {
+      updateInput_text(e) {
+      //console.log(e.target.value)
       const value = e.target.value
         this.setState({
           value: value,
-          text_hash: objectHash.sha1(value)
+          text_hash: objectHash.sha1(value),
+        })
+     }
+
+     updateInput_main(e) {
+      const value_main = e.target.value
+        this.setState({
+          value_main: value_main,
+          main_hash: objectHash.sha1(value_main),
         })
      }
 
@@ -180,12 +214,12 @@
             <h3>Цитата з Біблії:</h3>{this.state.text_hash}
 
             <br />
-              <textarea rows="7" cols="100" id="bible_text" value={this.state.value}
-                                            onChange={this.updateInput} />
+              <textarea rows="3" cols="100" id="bible_text" value={this.state.value}
+                                            onChange={this.updateInput_text} />
 
             <br />
                 <button onClick={this.handleAddAllWords}>
-                        Submit
+                        Поділити вірш на окремі слова
                 </button>
             <br />
             </div>
@@ -193,17 +227,18 @@
             <div id="main_text">
                      {this.state.main_hash}
                 <br />
-                    <textarea readOnly rows="7" cols="100" value={this.state.main_text} />
+                    <textarea rows="3" cols="100" value  ={this.state.value_main}
+                                            onChange={this.updateInput_main}/>
             </div>
 
             <div id="clear_button">
               <button id="clear_button" onClick={() => this.setState({
                 bible_words: [],
-                main_text: '',
+                value_main: '',
                 main_hash: objectHash.sha1(''),
 
 
-              })}>Clear All</button>
+              })}>Все очистити</button>
             </div>
 
 
@@ -211,14 +246,14 @@
             <  ActiveWords
                 list={this.state.bible_words.filter((bible_words) => bible_words.active === true)}
                 onRemoveWord={this.handleRemoveWord}
-                onToggleWord={this.handleToggleWord}
+                onToggleWord={this.handleToggleWord_from_active}
 
             />
             </div>
             <div id="inactive">
               <InactiveWords
                 list={this.state.bible_words.filter((bible_words) => bible_words.active === false)}
-                onToggleWord={this.handleToggleWord}
+                onToggleWord={this.handleToggleWord_to_active}
 
             />
             </div>
